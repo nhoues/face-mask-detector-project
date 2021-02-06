@@ -1,45 +1,40 @@
-import io
 import socket
+import sys
+import cv2
+import pickle
+import numpy as np
 import struct
-import time
-import picamera
 
-client_socket = socket.socket()
+HOST = '192.168.137.96'
+PORT = 8083
 
-client_socket.connect(('', 8000))  # ADD IP HERE
+s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print('Socket created')
 
-# Make a file-like object out of the connection
-connection = client_socket.makefile('wb')
-try:
-    camera = picamera.PiCamera()
-    camera.vflip = True
-    camera.resolution = (500, 480)
-    # Start a preview and let the camera warm up for 2 seconds
-    camera.start_preview()
-    time.sleep(2)
+s.bind((HOST, PORT))
+print('Socket bind complete')
+s.listen(10)
+print('Socket now listening')
 
-    # Note the start time and construct a stream to hold image data
-    # temporarily (we could write it directly to connection but in this
-    # case we want to find out the size of each capture first to keep
-    # our protocol simple)
-    start = time.time()
-    stream = io.BytesIO()
-    for foo in camera.capture_continuous(stream, 'jpeg'):
-        # Write the length of the capture to the stream and flush to
-        # ensure it actually gets sent
-        connection.write(struct.pack('<L', stream.tell()))
-        connection.flush()
-        # Rewind the stream and send the image data over the wire
-        stream.seek(0)
-        connection.write(stream.read())
-        # If we've been capturing for more than 30 seconds, quit
-        if time.time() - start > 60:
-            break
-        # Reset the stream for the next capture
-        stream.seek(0)
-        stream.truncate()
-    # Write a length of zero to the stream to signal we're done
-    connection.write(struct.pack('<L', 0))
-finally:
-    connection.close()
-    client_socket.close()
+conn, addr = s.accept()
+
+data = b''
+payload_size = struct.calcsize("L")
+
+while True:
+    while len(data) < payload_size:
+        data += conn.recv(4096)
+    packed_msg_size = data[:payload_size]
+
+    data = data[payload_size:]
+    msg_size = struct.unpack("L", packed_msg_size)[0]
+
+    while len(data) < msg_size:
+        data += conn.recv(4096)
+    frame_data = data[:msg_size]
+    data = data[msg_size:]
+
+    frame=pickle.loads(frame_data)
+    print(frame.size)
+    cv2.imshow('frame', frame)
+    cv2.waitKey(10)
