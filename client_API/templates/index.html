@@ -1,0 +1,11 @@
+{% block body %}
+<div class="jumbotron">
+    <h1 class="display-4">Embbeded system App </h1>
+    <p class="lead"></p>
+    <p>Title: {{ app_data['title'] }}</p>
+    <hr class="my-4">
+    <p> Door state : {{ app_data['door'] }} </p>
+    <p> Mask state : {{ app_data['mask'] }} </p>
+    <p> Instruction :{{ app_data['inst'] }} </p>
+  </div>
+{% endblock %}

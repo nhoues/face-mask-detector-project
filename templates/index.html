@@ -1,9 +1,27 @@
 <html>
-  <head>
-    <title>Raspberry Pi Live Video Feed</title>
-  </head>
-  <body>
-    <h1>Raspberry Pi Live Video Feed</h1>
-    <img id="bg" src="{{ url_for('video_feed') }}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <head>
+        <title>Embadded system project</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+        body {
+            background-image:url("https://34a0vrrs61o2fpmoztvq511d-wpengine.netdna-ssl.com/wp-content/uploads/2017/11/Cyber-Security-Background-Blue.jpg");
+        }
+        img {
+            border-radius: 30px;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>    
+    </head>
+    <body>
+        
+    <h1><center><p style="color:white">Covid security system </center></p></h1>
+    <span><h2 style="color:rgb(248, 245, 248)"><center><b>This application is created by</b></center></h2><h2 style="color:rgb(240, 17, 221)"><center><img width="50" height="50" src="https://i1.rgstatic.net/ii/lab.file/AS%3A573383932485632%401513716790098_xl"> <b>Sofien RESIFI & Naim HOUES & Ahmed BELKHIR</b> <img width="50" height="50" src="https://i1.rgstatic.net/ii/lab.file/AS%3A573383932485632%401513716790098_xl"></center></h2></span>
+    <center><img width="600" height="400" id="bg" src="{{ url_for('video_feed') }}"></center>
+      
   </body>
 </html>
